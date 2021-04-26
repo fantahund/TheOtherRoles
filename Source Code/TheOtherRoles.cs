@@ -48,6 +48,7 @@ namespace TheOtherRoles
             Trickster.clearAndReload();
             Cleaner.clearAndReload();
             Warlock.clearAndReload();
+            Undertaker.clearAndReload();
         }
 
         public static class Jester {
@@ -809,6 +810,38 @@ namespace TheOtherRoles
             curseKillTarget = null;
         }
         
+    }
+
+    public static class Undertaker {
+        public static PlayerControl undertaker;
+        public static Color color = new Color(115f / 255f, 115f / 255f, 115f / 255f, 1);
+
+        public static float updateIntervall = 5f;
+
+        public static PlayerControl currentTarget;
+        public static PlayerControl tracked;
+        public static bool usedTracker = false;
+        public static float timeUntilUpdate = 0f;
+        public static Arrow arrow = new Arrow(color);
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TrackerButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            undertaker = null;
+            currentTarget = null;
+            tracked = null;
+            usedTracker = false;
+            timeUntilUpdate = 0f;
+            updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
+            if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
+            arrow = new Arrow(color);
+            if (arrow.arrow != null) arrow.arrow.SetActive(false);
+        }
     }
 
 }

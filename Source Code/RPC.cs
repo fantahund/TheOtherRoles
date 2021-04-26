@@ -41,7 +41,8 @@ namespace TheOtherRoles
         Spy,
         Trickster,
         Cleaner,
-        Warlock
+        Warlock,
+        Undertaker
     }
 
     enum CustomRPC
@@ -85,7 +86,8 @@ namespace TheOtherRoles
         SetFutureShifted,
         PlaceJackInTheBox,
         LightsOut,
-        WarlockCurseKill
+        WarlockCurseKill,
+        UndertakerUsedTracker
     }
 
     public static class RPCProcedure {
@@ -211,6 +213,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Warlock:
                         Warlock.warlock = player;
+                        break;
+                    case RoleId.Undertaker:
+                        Undertaker.undertaker = player;
                         break;
                     }
                 }
@@ -386,7 +391,10 @@ namespace TheOtherRoles
                 Snitch.snitch = oldShifter;
             } else if (Spy.spy != null && Spy.spy == player) {
                 Spy.spy = oldShifter;
-            } else { // Crewmate
+            } else if (Undertaker.undertaker != null && Undertaker.undertaker == player) { 
+                Undertaker.undertaker = oldShifter;
+            } else {
+                // Crewmate
             }
             
             // Set cooldowns to max for both players
@@ -529,6 +537,7 @@ namespace TheOtherRoles
             if (player == Snitch.snitch) Snitch.clearAndReload();
             if (player == Swapper.swapper) Swapper.clearAndReload();
             if (player == Spy.spy) Spy.clearAndReload();
+            if (player == Undertaker.undertaker) Undertaker.clearAndReload();
 
             // Impostor roles
             if (player == Morphling.morphling) Morphling.clearAndReload();
@@ -590,6 +599,13 @@ namespace TheOtherRoles
                     return;
                 }
             }
+        }
+
+        public static void undertakerUsedTracker(byte targetId) {
+            Undertaker.usedTracker = true;
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                if (player.PlayerId == targetId)
+                    Undertaker.tracked = player;
         }
     }
 
@@ -729,6 +745,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.WarlockCurseKill:
                     RPCProcedure.warlockCurseKill(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.UndertakerUsedTracker:
+                    RPCProcedure.undertakerUsedTracker(reader.ReadByte());
                     break;
             }
         }

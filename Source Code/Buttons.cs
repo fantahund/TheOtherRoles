@@ -30,6 +30,7 @@ namespace TheOtherRoles
         private static CustomButton lightsOutButton;
         public static CustomButton cleanerCleanButton;
         public static CustomButton warlockCurseButton;
+        public static CustomButton undertakerButton;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -53,6 +54,7 @@ namespace TheOtherRoles
             lightsOutButton.MaxTimer = Trickster.lightsOutCooldown;
             cleanerCleanButton.MaxTimer = Cleaner.cooldown;
             warlockCurseButton.MaxTimer = Warlock.cooldown;
+            undertakerButton.MaxTimer = 0f;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -670,6 +672,22 @@ namespace TheOtherRoles
                 KeyCode.F
             );
 
+            // Undertaker button
+            undertakerButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UndertakerUsedTracker, Hazel.SendOption.Reliable, -1);
+                    writer.Write(Undertaker.currentTarget.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.undertakerUsedTracker(Undertaker.currentTarget.PlayerId);
+                },
+                () => { return Undertaker.undertaker != null && Undertaker.undertaker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove && Undertaker.currentTarget != null && !Undertaker.usedTracker; },
+                () => { },
+                Undertaker.getButtonSprite(),
+                new Vector3(-1.3f, 0, 0),
+                __instance,
+                KeyCode.Q
+            );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();

@@ -197,6 +197,12 @@ namespace TheOtherRoles
                 "Confuse the <color=#FF1919FF>Impostors</color>",
                 "Confuse the Impostors"));
             }
+            if (Undertaker.undertaker != null && p == Undertaker.undertaker) {
+                infos.Add(new RoleInfo("Undertaker",
+                Undertaker.color,
+                "Track dead bodies",
+                "Track dead bodies"));
+            }
             if (infos.Count == 0 && p.Data.IsImpostor) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",
                 Palette.ImpostorRed,

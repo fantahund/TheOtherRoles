@@ -115,7 +115,6 @@ namespace TheOtherRoles {
         public static CustomOption spySpawnRate;
         public static CustomOption spyCanDieToSheriff;
         public static CustomOption spyImpostorsCanKillAnyone;
-
         public static CustomOption tricksterSpawnRate;
         public static CustomOption tricksterPlaceBoxCooldown;
         public static CustomOption tricksterLightsOutCooldown;
@@ -127,6 +126,9 @@ namespace TheOtherRoles {
         public static CustomOption warlockSpawnRate;
         public static CustomOption warlockCooldown;
         public static CustomOption warlockRootTime;
+
+        public static CustomOption undertakerSpawnRate;
+        public static CustomOption undertakerUpdateIntervall;
 
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
@@ -261,6 +263,9 @@ namespace TheOtherRoles {
             spySpawnRate = CustomOption.Create(240, cs(Spy.color, "Spy"), rates, null, true);
             spyCanDieToSheriff = CustomOption.Create(241, "Spy Can Die To Sheriff", false, spySpawnRate);
             spyImpostorsCanKillAnyone = CustomOption.Create(242, "Impostors Can Kill Anyone If There Is A Spy", true, spySpawnRate);
+
+            undertakerSpawnRate = CustomOption.Create(205, cs(Undertaker.color, "Undertaker"), rates, null, true);
+            undertakerUpdateIntervall = CustomOption.Create(206, "Undertaker Update Intervall", 5f, 2.5f, 30f, 2.5f, undertakerSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);

@@ -237,7 +237,7 @@ namespace TheOtherRoles {
                             if (Engineer.engineer != null && Engineer.engineer.inVent) {
                                 vent.myRend.material.SetFloat("_Outline", 1f);
                                 vent.myRend.material.SetColor("_OutlineColor", Engineer.color);
-                            } else if (vent.myRend.material.GetColor("_AddColor") != Color.red) {
+                            } else if (vent.myRend.material.GetColor("_AddColor") != Color.red && vent.myRend.material.GetColor("_OutlineColor") != Undertaker.color) {
                                 vent.myRend.material.SetFloat("_Outline", 0);
                             }
                         }
@@ -281,6 +281,12 @@ namespace TheOtherRoles {
             }
         }
 
+        static void undertakerSetTarget() {
+            if (Undertaker.undertaker == null || Undertaker.undertaker != PlayerControl.LocalPlayer) return;
+            Undertaker.currentTarget = setTarget();
+            if (!Undertaker.usedTracker) setPlayerOutline(Undertaker.currentTarget, Undertaker.color);
+        }
+
         static void trackerUpdate() {
             if (Tracker.arrow?.arrow == null) return;
 
@@ -311,6 +317,52 @@ namespace TheOtherRoles {
                 }
             }
         }
+
+        static void undertackerUpdate() {
+            if (PlayerControl.LocalPlayer.Data.IsImpostor && ShipStatus.Instance?.AllVents != null) {
+                foreach (Vent vent in ShipStatus.Instance.AllVents) {
+                    try {
+                        if (vent?.myRend?.material != null) {
+                            if (Undertaker.undertaker != null && Undertaker.undertaker.inVent) {
+                                vent.myRend.material.SetFloat("_Outline", 1f);
+                                vent.myRend.material.SetColor("_OutlineColor", Undertaker.color);
+                            } else if (vent.myRend.material.GetColor("_AddColor") != Color.red && vent.myRend.material.GetColor("_OutlineColor") != Engineer.color) {
+                                vent.myRend.material.SetFloat("_Outline", 0);
+                            }
+                        }
+                    } catch {}
+                }
+            }
+
+            if (Undertaker.arrow?.arrow == null) return;
+
+            if (Undertaker.undertaker == null || PlayerControl.LocalPlayer != Undertaker.undertaker) {
+                Undertaker.arrow.arrow.SetActive(false);
+                return;
+            }
+
+            if (Undertaker.undertaker != null && Undertaker.undertaker != null && PlayerControl.LocalPlayer == Undertaker.undertaker && !Undertaker.undertaker.Data.IsDead) {
+                Undertaker.timeUntilUpdate -= Time.fixedDeltaTime;
+
+                if (Undertaker.timeUntilUpdate <= 0f) {
+                    bool trackBody = Undertaker.tracked.Data.IsDead;
+                    if (trackBody) { // Check for dead body
+                        DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Undertaker.tracked.PlayerId);
+                        if (body != null) {
+                            trackBody = true;
+                            Vector3 position = body.transform.position;
+                            Undertaker.arrow.Update(position);
+                        } else {
+                            trackBody = false;
+                        }
+                    }
+                    Undertaker.arrow.arrow.SetActive(trackBody);
+                    Undertaker.timeUntilUpdate = Undertaker.updateIntervall;
+                } else {
+                    Undertaker.arrow.Update();
+                }
+            }
+        }        
 
         public static void playerSizeUpdate(PlayerControl p) {
             // Set default player size
@@ -417,6 +469,11 @@ namespace TheOtherRoles {
                 impostorSetTarget();
                 // Warlock
                 warlockSetTarget();
+
+                // Undertaker
+                undertakerSetTarget();
+                undertackerUpdate();
+
                 // Check for sidekick promotion on Jackal disconnect
                 sidekickCheckPromotion();
             } 

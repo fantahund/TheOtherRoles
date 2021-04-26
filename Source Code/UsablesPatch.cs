@@ -24,6 +24,8 @@ namespace TheOtherRoles
             bool roleCouldUse = false;
             if (Engineer.engineer != null && Engineer.engineer == @object)
                 roleCouldUse = true;
+            else if (Undertaker.undertaker != null && Undertaker.undertaker == @object)
+                roleCouldUse = true;
             else if (Jackal.canUseVents && Jackal.jackal != null && Jackal.jackal == @object)
                 roleCouldUse = true;
             else if (Sidekick.canUseVents && Sidekick.sidekick != null && Sidekick.sidekick == @object)
