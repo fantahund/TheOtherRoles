@@ -26,6 +26,7 @@ Even more roles are coming soon :)
 |  | [Swapper](#swapper) |  |
 |  | [Time Master](#time-master) |  |
 |  |  [Tracker](#tracker) |  |
+|  |  [Undertacker](#undertaker) |  |
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
@@ -54,6 +55,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 2.4.1**
+- **New Role:** [Undertacker](#undertaker)
 
 **Version 2.4.0**
 - **New Role:** [Warlock](#warlock)
@@ -854,14 +858,19 @@ There are two possibilities (depending on the set options):
 - The Impostors can kill the Spy but they can also kill their Impostor partner (if they mistake another Impostor for the Spy)
 You can set whether the Sheriff can kill the Spy or not (in order to keep the lie alive).
 
+## Undertacker
+### **Team: Crewmates**
+The Undertaker can select one player in a game and find the body once the player is dead.
+An arrow points to the position of the players body.
+The Undertaker can use vents. If the Undertaker is inside a vent, the Impostors will see a gray outline
+around all vents on the map (in order to warn them). It overrides the outline of the Engineer.
+
 ### Game Options
 | Name | Description
 |----------|:-------------:|
-| Spy Spawn Chance |
-| Spy Can Die To Sheriff | 
-| Impostors Can Kill Anyone If There Is A Spy | This allows the Impostors to kill both the Spy and their Impostor partners
+| Undertacker Spawn Chance | -
+| Undertacker Update Intervall | Sets how often the position is being updated
 -----------------------
-
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
